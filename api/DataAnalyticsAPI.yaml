@@ -1,0 +1,246 @@
+swagger: "2.0"
+info:
+  description: "Beta version of the DITAS Data Analytics REST API"
+  version: "0.0.1"
+  title: "DITAS Data analytics"
+  contact:
+    email: "bogdan.despotov@cloudsigma.com"
+host: "ditas-test.zrh.cloudsigma.com"
+basePath: "/da"
+tags:
+- name: "Metrics"
+  description: "Retrieval of metrics based on blueprint method"
+- name: "Resources"
+  description: "Retrieval of cluster defined resources and current resource usage"
+schemes:
+- "https"
+paths:
+  /metrics:
+    get:
+      tags:
+      - "Metrics"
+      summary: "Get all available methods"
+      description: "Displays available methods based on the deployment blueprint"
+      operationId: "getMethods"
+      produces:
+      - "application/json"
+      - "application/xml"
+      parameters: []
+      responses:
+        200:
+          description: "Success"
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Method"
+        404:
+          description: "No methods have been found"
+  /metrics/{methodId}:
+    get:
+      tags:
+      - "Metrics"
+      summary: "Get aggregated metrics for method id"
+      description: "Displays aggregated metrics for method id for the whole duration of the deployment"
+      operationId: "getMetrics"
+      produces:
+      - "application/json"
+      - "application/xml"
+      parameters:
+      - in: "path"
+        name: "methodId"
+        required: true
+        description: "Method id based on deployment blueprint"
+        schema:
+          $ref: "#/definitions/Metrics"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/Metrics"
+        400:
+          description: "Method id is invalid"
+  /metrics/{methodId}/responseTime:
+    post:
+      tags:
+      - "Metrics"
+      summary: "Retrieves response times for method id"
+      description: "The amount of time (usually expressed in seconds) the platform takes to provide the output of a specific request."
+      operationId: "responseTime"
+      produces:
+      - "application/json"
+      - "application/xml"
+      parameters:
+      - in: "path"
+        name: "methodId"
+        required: true
+        description: "Filter response time by method"
+      - in: "body"
+        name: "body"
+        description: "Filter response time by timeframe"
+        required: true
+        schema:
+            $ref: "#/definitions/metricTimeDef"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/metricTimeRes"
+  /metrics/{methodId}/availability:
+    post:
+      tags:
+      - "Metrics"
+      summary: "Retrieves availability for method id"
+      description: "The time when the service was up and operation, shown in percentages"
+      operationId: "availability"
+      produces:
+      - "application/json"
+      - "application/xml"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Filter availability by timeframe"
+      - in: "path"
+        name: "methodId"
+        description: "Filter availability by method"
+        required: true
+        schema:
+          $ref: "#/definitions/metricTimeDef"
+      responses:
+        default:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/metricTimeRes"
+  /metrics/{methodId}/throughput:
+    post:
+      tags:
+      - "Metrics"
+      summary: "Retrieves throughput for method id"
+      description: "The total amount of work completed in a given time. Considering data transmission, it refers to the data transfer rate."
+      operationId: "throughput"
+      produces:
+      - "application/json"
+      - "application/xml"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Filter throughput by timeframe"
+      - in: "path"
+        name: "methodId"
+        description: "Filter throughput by method"
+        required: true
+        schema:
+          $ref: "#/definitions/metricTimeDef"
+      responses:
+        default:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/metricTimeRes"
+  /metrics/{methodId}/volume:
+    get:
+      tags:
+      - "Metrics"
+      summary: "Retrieves volume for method id"
+      description: "This metric specifies the amount of volume in tuples that the method will return"
+      operationId: "volume"
+      produces:
+      - "application/json"
+      - "application/xml"
+      parameters:
+      - in: "path"
+        name: "methodId"
+        description: "Filter volume by method"
+        required: true
+      responses:
+        default:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/metricRes"
+  /resources:
+    get:
+      tags:
+      - "Resources"
+      summary: "Outputs the resources defined for the whole cluster"
+      operationId: "resources"
+      produces:
+      - "application/json"
+      - "application/xml"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/Resources"
+  /resources/usage:
+    get:
+      tags:
+      - "Resources"
+      summary: "Outputs the current resource usage for the whole cluster"
+      operationId: "currentUsage"
+      produces:
+      - "application/json"
+      - "application/xml"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/Resources"
+definitions:
+  Resources:
+    type: "object"
+    properties:
+      cpu:
+        type: "integer"
+      mem:
+        type: "integer"
+      storage:
+        type: "integer"
+  Metrics:
+    type: "object"
+    properties:
+      methodId:
+        type: "string"
+      metricName:
+        type: "string"
+      aggregatedValue:
+        type: "string"
+    xml:
+      name: "Metrics"
+  metricRes:
+    type: "object"
+    properties:
+      methodId:
+        type: "string"
+      result:
+        type: "integer"
+      resultUnit:
+        type: "string"
+  metricTimeDef:
+    type: "object"
+    properties:
+      methodId:
+        type: "string"
+      startTime:
+        type: "string"
+        format: "date-time"
+      endTime:
+        type: "string"
+        format: "date-time"
+  metricTimeRes:
+    type: "object"
+    properties:
+      methodId:
+        type: "string"
+      startTime:
+        type: "string"
+        format: "date-time"
+      endTime:
+        type: "string"
+        format: "date-time"
+      result:
+        type: "integer"
+      resultUnit:
+        type: "string"
+  Method:
+    type: "object"
+    properties:
+      name:
+        type: "string"
