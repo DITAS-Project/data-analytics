@@ -5,8 +5,8 @@ info:
   title: "DITAS Data analytics"
   contact:
     email: "bogdan.despotov@cloudsigma.com"
-host: "ditas-test.zrh.cloudsigma.com"
-basePath: "/da"
+host: "localhost:9001"
+basePath: "/"
 tags:
 - name: "Metrics"
   description: "Retrieval of metrics based on blueprint method"
