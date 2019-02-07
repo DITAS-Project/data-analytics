@@ -5,7 +5,6 @@ info:
   title: DITAS Data analytics
   contact:
     email: bogdan.despotov@cloudsigma.com
-host: 'localhost:9001'
 basePath: /data-analytics
 tags:
   - name: Metrics
@@ -15,7 +14,7 @@ tags:
 schemes:
   - https
 paths:
-  /metrics:
+  /metrics/:
     get:
       tags:
         - Metrics
@@ -35,7 +34,7 @@ paths:
               $ref: '#/definitions/Method'
         '404':
           description: No methods have been found
-  '/metrics/{methodId}':
+  '/metrics/{methodId}/':
     get:
       tags:
         - Metrics
@@ -60,7 +59,7 @@ paths:
             $ref: '#/definitions/Metrics'
         '400':
           description: Method id is invalid
-  '/metrics/{methodId}/responseTime':
+  '/metrics/{methodId}/responseTime/':
     get:
       tags:
         - Metrics
@@ -93,7 +92,7 @@ paths:
           description: Success
           schema:
             $ref: '#/definitions/metricTimeRes'
-  '/metrics/{methodId}/availability':
+  '/metrics/{methodId}/availability/':
     get:
       tags:
         - Metrics
@@ -123,7 +122,7 @@ paths:
           description: Success
           schema:
             $ref: '#/definitions/metricTimeRes'
-  '/metrics/{methodId}/throughput':
+  '/metrics/{methodId}/throughput/':
     get:
       tags:
         - Metrics
@@ -156,7 +155,7 @@ paths:
           description: Success
           schema:
             $ref: '#/definitions/metricTimeRes'
-  '/metrics/{methodId}/volume':
+  '/metrics/{methodId}/volume/':
     get:
       tags:
         - Metrics
@@ -179,7 +178,7 @@ paths:
           description: Success
           schema:
             $ref: '#/definitions/metricRes'
-  '/metrics/{methodId}/timeliness':
+  '/metrics/{methodId}/timeliness/':
     get:
       tags:
         - Metrics
@@ -203,7 +202,7 @@ paths:
           description: Success
           schema:
             $ref: '#/definitions/metricRes'
-  '/metrics/{methodId}/completeness':
+  '/metrics/{methodId}/completeness/':
     get:
       tags:
         - Metrics
@@ -227,7 +226,7 @@ paths:
           description: Success
           schema:
             $ref: '#/definitions/metricRes'
-  /resources:
+  /resources/:
     get:
       tags:
         - Resources
@@ -241,7 +240,7 @@ paths:
           description: Success
           schema:
             $ref: '#/definitions/Resources'
-  /resources/usage:
+  /resources/usage/:
     get:
       tags:
         - Resources
