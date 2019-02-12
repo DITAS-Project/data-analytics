@@ -1,7 +1,7 @@
 swagger: '2.0'
 info:
   description: Beta version of the DITAS Data Analytics REST API
-  version: 0.0.3
+  version: 0.0.5
   title: DITAS Data analytics
   contact:
     email: bogdan.despotov@cloudsigma.com
@@ -226,29 +226,51 @@ paths:
           description: Success
           schema:
             $ref: '#/definitions/metricRes'
-  /resources/:
+  '/resources/{infraId}/{nodeId}/':
     get:
       tags:
         - Resources
-      summary: Outputs the resources defined for the whole cluster
+      summary: Outputs the resources defined for nodeId
       operationId: resources
       produces:
         - application/json
         - application/xml
+      parameters: 
+        - in: path
+          name: infraId
+          description: The infrastructure name based on the blueprint
+          required: true
+          type: string
+        - in: path
+          name: nodeId
+          description: The node name based on the blueprint
+          required: true
+          type: string
       responses:
         '200':
           description: Success
           schema:
             $ref: '#/definitions/Resources'
-  /resources/usage/:
+  '/resources/{infraId}/{nodeId}/usage/':
     get:
       tags:
         - Resources
-      summary: Outputs the current resource usage for the whole cluster
+      summary: Outputs the current resource usage for nodeId
       operationId: currentUsage
       produces:
         - application/json
         - application/xml
+      parameters: 
+        - in: path
+          name: infraId
+          description: The infrastructure name based on the blueprint
+          required: true
+          type: string
+        - in: path
+          name: nodeId
+          description: The node name based on the blueprint
+          required: true
+          type: string
       responses:
         '200':
           description: Success
