@@ -1,6 +1,6 @@
 import json
 
-from kubernetes import client, config
+from kubernetes import client
 from .conf import config
 
 
