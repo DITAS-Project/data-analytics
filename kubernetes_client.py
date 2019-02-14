@@ -6,8 +6,8 @@ from .conf import config
 
 class GenericK8Client:
 
-    def __init__(self, host=None, api_key=None, verify_ssl=False, **kwargs):
-        self.host = host if host is not None else config['host']
+    def __init__(self, infra_name=None, host=None, api_key=None, verify_ssl=False, **kwargs):
+        self.host = host if host is not None else config['infra'][infra_name]['host']
         if 'api_key' in config:
             self.api_key = config['api_key']
         else:

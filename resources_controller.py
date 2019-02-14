@@ -6,6 +6,7 @@ from swagger_server.models.resources import Resources  # noqa: E501
 from swagger_server import util
 
 from .kubernetes_client import GenericK8Client
+from .conf import config
 
 
 def current_usage(infraId, nodeId):  # noqa: E501
@@ -16,7 +17,9 @@ def current_usage(infraId, nodeId):  # noqa: E501
 
     :rtype: Resources
     """
-    k8client = GenericK8Client()
+    if infraId not in config['infra_names']:
+        return 'Infrastructure Id not found in Blueprint', 404
+    k8client = GenericK8Client(infra_name=infraId)
     try:
         result = k8client.custom_client('/apis/metrics.k8s.io/v1beta1/nodes/' + nodeId)
     except Exception as e:
@@ -38,7 +41,9 @@ def resources(infraId, nodeId):  # noqa: E501
 
     :rtype: Resources
     """
-    k8client = GenericK8Client()
+    if infraId not in config['infra_names']:
+        return 'Infrastructure Id not found in Blueprint', 404
+    k8client = GenericK8Client(infra_name=infraId)
     v1 = k8client.v1client()
     try:
         result = v1.list_node()
