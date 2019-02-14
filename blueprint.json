@@ -685,6 +685,7 @@
                "generate_ssh_keys":false,
                "ssh_keys_id":"uuid",
                "role":"master",
+				"ip": "104.36.16.199",
                "image_id":"a2a67f55-c775-4871-808d-53136e31d2f0",
                "drives":[
                   {

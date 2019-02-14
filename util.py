@@ -151,3 +151,11 @@ def nodename_sanitizer(infra_id, node_id):
     else:
         node_name = infra_id.lower() + '-' + node_id.lower()
     return node_name
+
+
+def normalize_metrics(cpu=None, mem=None, storage=None):
+    if mem:
+        if 'Ki' in mem:
+            mem = int(mem.replace('Ki', '')) * 0.001
+
+    return {'cpu': cpu, 'mem': mem, 'storage': storage}
