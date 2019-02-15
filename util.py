@@ -153,9 +153,13 @@ def nodename_sanitizer(infra_id, node_id):
     return node_name
 
 
-def normalize_metrics(cpu=None, mem=None, storage=None):
+def normalize_metrics(cpu=None, cores=None, mem=None, storage=None):
     if mem:
         if 'Ki' in mem:
             mem = int(mem.replace('Ki', '')) * 0.001
 
+    if cpu and cores:
+        if 'n' in cpu:
+            cpu = int(cpu.replace('n', ''))
+        cpu = (cpu / (cores * 1e+9)) * 100
     return {'cpu': cpu, 'mem': mem, 'storage': storage}

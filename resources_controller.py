@@ -20,6 +20,7 @@ def current_usage(infraId, nodeId):  # noqa: E501
     if infraId not in config['infra_names']:
         return 'Infrastructure Id not found in Blueprint', 404
     k8client = GenericK8Client(infra_name=infraId)
+    v1 = k8client.v1client()
     try:
         result = k8client.custom_client('/apis/metrics.k8s.io/v1beta1/nodes/' + nodeId)
     except Exception as e:
@@ -28,9 +29,18 @@ def current_usage(infraId, nodeId):  # noqa: E501
         else:
             return 'Cannot connect to Kubernetes metrics API: {}'.format(e), 500
 
+    try:
+        res = v1.list_node()
+    except Exception as e:
+        return 'Cannot connect to Kubernetes API: {}'.format(e), 500
+
+    for node in res.items:
+        if node.metadata.name == nodeId:
+            cpu = util.normalize_metrics(cores=int(node.status.capacity['cpu']), cpu=result['usage']['cpu'])['cpu']
+
     mem = util.normalize_metrics(mem=result['usage']['memory'])['mem']
 
-    return {'cpu': result['usage']['cpu'], 'mem': mem, 'storage': 0}
+    return {'cpu': cpu, 'mem': mem, 'storage': 0}
 
 
 def resources(infraId, nodeId):  # noqa: E501
