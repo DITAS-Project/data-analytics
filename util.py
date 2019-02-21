@@ -162,4 +162,8 @@ def normalize_metrics(cpu=None, cores=None, mem=None, storage=None):
         if 'n' in cpu:
             cpu = int(cpu.replace('n', ''))
         cpu = (cpu / (cores * 1e+9)) * 100
+
+    if storage:
+        storage = storage * 1e-9
+
     return {'cpu': cpu, 'mem': mem, 'storage': storage}
