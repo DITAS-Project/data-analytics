@@ -1,7 +1,7 @@
 swagger: '2.0'
 info:
   description: Beta version of the DITAS Data Analytics REST API
-  version: 0.0.5
+  version: 0.0.6
   title: DITAS Data analytics
   contact:
     email: bogdan.despotov@cloudsigma.com
@@ -230,12 +230,12 @@ paths:
     get:
       tags:
         - Resources
-      summary: Outputs the resources defined for nodeId
+      summary: Outputs the CPU (cores) and memory (MB) capacity for nodeId and the capacity of the storage cluster (GB)
       operationId: resources
       produces:
         - application/json
         - application/xml
-      parameters: 
+      parameters:
         - in: path
           name: infraId
           description: The infrastructure name based on the blueprint
@@ -255,12 +255,12 @@ paths:
     get:
       tags:
         - Resources
-      summary: Outputs the current resource usage for nodeId
+      summary: Outputs the CPU percentage used by nodeId, the remaining free memory (MB) and the free space (GB) remaining on the storage cluster
       operationId: currentUsage
       produces:
         - application/json
         - application/xml
-      parameters: 
+      parameters:
         - in: path
           name: infraId
           description: The infrastructure name based on the blueprint
