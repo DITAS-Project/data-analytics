@@ -1,7 +1,7 @@
 swagger: '2.0'
 info:
   description: Beta version of the DITAS Data Analytics REST API
-  version: 0.0.7
+  version: 0.0.8
   title: DITAS Data analytics
   contact:
     email: bogdan.despotov@cloudsigma.com
@@ -18,7 +18,6 @@ paths:
     get:
       tags:
         - Metrics
-      summary: Get aggregated metrics for method id
       description: Get metric value based on meter operation id, name, timestamp
       operationId: getmetrics
       produces:
@@ -35,10 +34,16 @@ paths:
           required: true
           description: Name of meter
           type: string
-        - name: timestamp
+        - name: startTime
           in: query
           required: true
-          description: Timestamp of meter
+          description: Start timestamp of meter
+          type: string
+          format: date-time
+        - name: endTime
+          in: query
+          required: true
+          description: End timestamp of meter
           type: string
           format: date-time
       responses:
