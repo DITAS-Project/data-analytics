@@ -1,7 +1,7 @@
 swagger: '2.0'
 info:
   description: Beta version of the DITAS Data Analytics REST API
-  version: 0.0.8
+  version: 0.0.9
   title: DITAS Data analytics
   contact:
     email: bogdan.despotov@cloudsigma.com
@@ -14,7 +14,7 @@ tags:
 schemes:
   - https
 paths:
-  '/meter/{operationID}/':
+  '/meter/{infraId}/{nodeId}/{operationID}/':
     get:
       tags:
         - Metrics
@@ -24,6 +24,16 @@ paths:
         - application/json
         - application/xml
       parameters:
+        - in: path
+          name: infraId
+          description: The infrastructure name based on the blueprint
+          required: true
+          type: string
+        - in: path
+          name: nodeId
+          description: The node name based on the blueprint
+          required: true
+          type: string
         - name: operationID
           in: path
           required: true

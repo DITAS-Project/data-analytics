@@ -1,0 +1,158 @@
+---
+swagger: "2.0"
+info:
+  description: "Beta version of the DITAS Data Analytics REST API"
+  version: "0.0.9"
+  title: "DITAS Data analytics"
+  contact:
+    email: "bogdan.despotov@cloudsigma.com"
+basePath: "/data-analytics"
+tags:
+- name: "Metrics"
+  description: "Retrieval of metrics based on blueprint method"
+- name: "Resources"
+  description: "Retrieval of cluster defined resources and current resource usage"
+schemes:
+- "https"
+paths:
+  /meter/{infraId}/{nodeId}/{operationID}/:
+    get:
+      tags:
+      - "Metrics"
+      description: "Get metric value based on meter operation id, name, timestamp"
+      operationId: "getmetrics"
+      produces:
+      - "application/json"
+      - "application/xml"
+      parameters:
+      - name: "infraId"
+        in: "path"
+        description: "The infrastructure name based on the blueprint"
+        required: true
+        type: "string"
+      - name: "nodeId"
+        in: "path"
+        description: "The node name based on the blueprint"
+        required: true
+        type: "string"
+      - name: "operationID"
+        in: "path"
+        description: "Operation id based on deployment blueprint"
+        required: true
+        type: "string"
+      - name: "name"
+        in: "query"
+        description: "Name of meter"
+        required: true
+        type: "string"
+      - name: "startTime"
+        in: "query"
+        description: "Start timestamp of meter"
+        required: true
+        type: "string"
+        format: "date-time"
+      - name: "endTime"
+        in: "query"
+        description: "End timestamp of meter"
+        required: true
+        type: "string"
+        format: "date-time"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/metricRes"
+        400:
+          description: "Invalid data input"
+      x-swagger-router-controller: "swagger_server.controllers.metrics_controller"
+  /resources/{infraId}/{nodeId}/:
+    get:
+      tags:
+      - "Resources"
+      summary: "Outputs the CPU (cores) and memory (MB) capacity for nodeId and the\
+        \ capacity of the storage cluster (GB)"
+      operationId: "resources"
+      produces:
+      - "application/json"
+      - "application/xml"
+      parameters:
+      - name: "infraId"
+        in: "path"
+        description: "The infrastructure name based on the blueprint"
+        required: true
+        type: "string"
+      - name: "nodeId"
+        in: "path"
+        description: "The node name based on the blueprint"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/Resources"
+      x-swagger-router-controller: "swagger_server.controllers.resources_controller"
+  /resources/{infraId}/{nodeId}/usage/:
+    get:
+      tags:
+      - "Resources"
+      summary: "Outputs the CPU percentage used by nodeId, the remaining free memory\
+        \ (MB) and the free space (GB) remaining on the storage cluster"
+      operationId: "current_usage"
+      produces:
+      - "application/json"
+      - "application/xml"
+      parameters:
+      - name: "infraId"
+        in: "path"
+        description: "The infrastructure name based on the blueprint"
+        required: true
+        type: "string"
+      - name: "nodeId"
+        in: "path"
+        description: "The node name based on the blueprint"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/Resources"
+      x-swagger-router-controller: "swagger_server.controllers.resources_controller"
+definitions:
+  Resources:
+    type: "object"
+    properties:
+      cpu:
+        type: "integer"
+      mem:
+        type: "integer"
+      storage:
+        type: "integer"
+    example:
+      mem: 6
+      cpu: 0
+      storage: 1
+  metricRes:
+    type: "object"
+    properties:
+      operationID:
+        type: "string"
+      name:
+        type: "string"
+      value:
+        type: "integer"
+      unit:
+        type: "string"
+      timestamp:
+        type: "string"
+        format: "date-time"
+      appendix:
+        type: "string"
+    example:
+      unit: "unit"
+      appendix: "appendix"
+      name: "name"
+      operationID: "operationID"
+      value: 0
+      timestamp: "2000-01-23T04:56:07.000+00:00"
