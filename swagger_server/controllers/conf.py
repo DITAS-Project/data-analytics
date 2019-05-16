@@ -26,6 +26,8 @@ if os.path.isfile('/opt/blueprint/blueprint.json'):
                     config['infra'][infra['name']]['host'] = 'http://{}:9999'.format(
                         nodename_sanitizer(infra['name'], res['name']))
 
+    config['es_api'] = 'http://104.36.16.199:9999/api/v1/namespaces/ditas/services/elasticsearch-client:9200/proxy/'
+
 else:
     CONFIG_LOCATION = os.getenv('DA_CONFIG',
                                 os.path.join(os.path.expanduser('~'), '.data-analytics.conf')
