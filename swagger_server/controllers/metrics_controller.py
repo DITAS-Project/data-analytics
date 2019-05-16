@@ -66,7 +66,7 @@ def getmetrics(infraId, nodeId, operationID, name, startTime, endTime):  # noqa:
 
     startTime = util.deserialize_datetime(startTime)
     endTime = util.deserialize_datetime(endTime)
-    index_name = '{}-{}-*'.format(infraId, nodeId)
+    index_name = '{}-*'.format(infraId)
     BASE_QUERY['query']['bool']['must'][1]['match']['meter.name'] = name
     BASE_QUERY['query']['bool']['must'][2]['match']['meter.operationID'] = operationID
     BASE_QUERY['query']['bool']['must'][3]['range']['meter.timestamp']['gte'] = startTime
@@ -79,6 +79,6 @@ def getmetrics(infraId, nodeId, operationID, name, startTime, endTime):  # noqa:
         return 'Exception while querying elasticsearch: {}'.format(e), 500
     output_array = []
     for hit in result['hits']['hits']:
-        output_array.append(hit)
+        output_array.append(hit['_source'])
 
     return output_array
