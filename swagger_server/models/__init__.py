@@ -4,4 +4,5 @@
 from __future__ import absolute_import
 # import models into model package
 from swagger_server.models.metric_res import MetricRes
+from swagger_server.models.metric_res_inner import MetricResInner
 from swagger_server.models.resources import Resources

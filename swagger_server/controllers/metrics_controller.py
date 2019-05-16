@@ -39,7 +39,7 @@ BASE_QUERY = {
 }
 
 
-def getmetrics(infraId, nodeId, operationID, name, startTime, endTime):  # noqa: E501
+def getmetrics(infraId, operationID, name, startTime, endTime):  # noqa: E501
 
     """getmetrics
 
@@ -47,8 +47,6 @@ def getmetrics(infraId, nodeId, operationID, name, startTime, endTime):  # noqa:
 
     :param infraId: The infrastructure name based on the blueprint
     :type infraId: str
-    :param nodeId: The node name based on the blueprint
-    :type nodeId: str
     :param operationID: Operation id based on deployment blueprint
     :type operationID: str
     :param name: Name of meter
