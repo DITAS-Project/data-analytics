@@ -17,9 +17,11 @@ class TestResourcesController(BaseTestCase):
 
         Outputs the CPU percentage used by nodeId, the remaining free memory (MB) and the free space (GB) remaining on the storage cluster
         """
+        query_string = [('nodeId', 'nodeId_example')]
         response = self.client.open(
-            '/data-analytics/resources/{infraId}/{nodeId}/usage/'.format(infraId='infraId_example', nodeId='nodeId_example'),
-            method='GET')
+            '/data-analytics/resources/{infraId}/usage/'.format(infraId='infraId_example'),
+            method='GET',
+            query_string=query_string)
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))
 
@@ -28,9 +30,11 @@ class TestResourcesController(BaseTestCase):
 
         Outputs the CPU (cores) and memory (MB) capacity for nodeId and the capacity of the storage cluster (GB)
         """
+        query_string = [('nodeId', 'nodeId_example')]
         response = self.client.open(
-            '/data-analytics/resources/{infraId}/{nodeId}/'.format(infraId='infraId_example', nodeId='nodeId_example'),
-            method='GET')
+            '/data-analytics/resources/{infraId}/'.format(infraId='infraId_example'),
+            method='GET',
+            query_string=query_string)
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))
 

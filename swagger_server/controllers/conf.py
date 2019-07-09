@@ -16,9 +16,9 @@ if os.path.isfile('/opt/blueprint/blueprint.json'):
     for infra in blueprint['COOKBOOK_APPENDIX']['infrastructure']:
         config['infra_names'].append(infra['name'])
         config['infra'][infra['name']] = {}
-        config['infra'][infra['name']]['node_names'] = []
         for res in infra['resources']:
-            config['infra'][infra['name']]['node_names'].append(res['name'])
+            config['infra'][infra['name']][res['name']] = {}
+            config['infra'][infra['name']][res['name']]['cpu'] = res['cpu']
             if res['role'] == 'master':
                 if 'ip' in res:
                     config['infra'][infra['name']]['host'] = 'http://{}:9999'.format(res['ip'])

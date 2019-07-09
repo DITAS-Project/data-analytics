@@ -1,7 +1,7 @@
 swagger: '2.0'
 info:
   description: Beta version of the DITAS Data Analytics REST API
-  version: 0.1.1
+  version: 0.1.2
   title: DITAS Data analytics
   contact:
     email: bogdan.despotov@cloudsigma.com
@@ -58,7 +58,7 @@ paths:
             $ref: '#/definitions/metricRes'
         '400':
           description: Invalid data input
-  '/resources/{infraId}/{nodeId}/':
+  '/resources/{infraId}/':
     get:
       tags:
         - Resources
@@ -73,17 +73,17 @@ paths:
           description: The infrastructure name based on the blueprint
           required: true
           type: string
-        - in: path
+        - in: query
           name: nodeId
           description: The node name based on the blueprint
-          required: true
+          required: false
           type: string
       responses:
         '200':
           description: Success
           schema:
             $ref: '#/definitions/Resources'
-  '/resources/{infraId}/{nodeId}/usage/':
+  '/resources/{infraId}/usage/':
     get:
       tags:
         - Resources
@@ -98,10 +98,10 @@ paths:
           description: The infrastructure name based on the blueprint
           required: true
           type: string
-        - in: path
+        - in: query
           name: nodeId
           description: The node name based on the blueprint
-          required: true
+          required: false
           type: string
       responses:
         '200':
