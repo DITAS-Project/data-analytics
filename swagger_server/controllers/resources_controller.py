@@ -44,10 +44,13 @@ def current_usage(infraId, nodeId=None):  # noqa: E501
         if nodeId and node.metadata.name == nodeId:
             cpu = util.normalize_metrics(cores=int(node.status.capacity['cpu']), cpu=result['usage']['cpu'])['cpu']
         elif node.metadata.name in config['infra'][infraId].keys():
-            cpu = util.normalize_metrics(cores=int(node.status.capacity['cpu']), cpu=result['usage']['cpu'])['cpu']
-            total_cpu_usage += config['infra'][infraId][node.metadata.name]['cpu'] * (cpu / 100)
-            total_cpu_cap += config['infra'][infraId][node.metadata.name]['cpu']
-            total_mem_usage += util.normalize_metrics(mem=result['usage']['memory'])['mem']
+            for n in result['items']:
+                if n['metadata']['name'] == node.metadata.name:
+                    cpu = util.normalize_metrics(cores=int(node.status.capacity['cpu']), cpu=n['usage']['cpu'])['cpu']
+                    total_cpu_usage += config['infra'][infraId][node.metadata.name]['cpu'] * (cpu / 100)
+                    total_cpu_cap += config['infra'][infraId][node.metadata.name]['cpu']
+                    total_mem_usage += util.normalize_metrics(mem=result['usage']['memory'])['mem']
+
     if total_cpu_usage and total_cpu_cap:
         total_cpu_average = total_cpu_usage / total_cpu_cap
 

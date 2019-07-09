@@ -3,13 +3,14 @@
 import connexion
 
 from swagger_server import encoder
+from swagger_server.controllers.conf import config
 
 
 def main():
     app = connexion.App(__name__, specification_dir='./swagger/')
     app.app.json_encoder = encoder.JSONEncoder
     app.add_api('swagger.yaml', arguments={'title': 'DITAS Data analytics'})
-    app.run(port=8080)
+    app.run(port=config['port'])
 
 
 if __name__ == '__main__':

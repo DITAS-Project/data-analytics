@@ -3,13 +3,17 @@ import json
 
 from swagger_server.util import nodename_sanitizer
 
-if os.path.isfile('/opt/blueprint/blueprint.json'):
+if os.path.isfile('/opt/blueprint/blueprint.json') and os.path.isfile('/etc/ditas/vdc/data-analytics.json'):
     with open('/opt/blueprint/blueprint.json', 'r') as blueprint_cont:
         try:
             blueprint = json.load(blueprint_cont)
         except Exception as e:
             print('Could not load JSON content from blueprint file: {}'.format(e))
-
+    with open('/etc/ditas/vdc/data-analytics.json') as da_conf_file:
+        try:
+            da_conf = json.load(da_conf_file)
+        except Exception as e:
+            print('Could not load JSON content from config file: {}'.format(e))
     config = {}
     config['infra_names'] = []
     config['infra'] = {}
@@ -26,8 +30,8 @@ if os.path.isfile('/opt/blueprint/blueprint.json'):
                     config['infra'][infra['name']]['host'] = 'http://{}:9999'.format(
                         nodename_sanitizer(infra['name'], res['name']))
 
-    config['es_api'] = 'http://104.36.16.199:9999/api/v1/namespaces/ditas/services/elasticsearch-client:9200/proxy/'
-
+    config['es_api'] = da_conf['ElasticSearchURL']
+    config['port'] = da_conf['Port']
 else:
     CONFIG_LOCATION = os.getenv('DA_CONFIG',
                                 os.path.join(os.path.expanduser('~'), '.data-analytics.conf')

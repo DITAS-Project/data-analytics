@@ -2,7 +2,7 @@
 swagger: "2.0"
 info:
   description: "Beta version of the DITAS Data Analytics REST API"
-  version: "0.1.1"
+  version: "0.1.2"
   title: "DITAS Data analytics"
   contact:
     email: "bogdan.despotov@cloudsigma.com"
@@ -60,7 +60,7 @@ paths:
         400:
           description: "Invalid data input"
       x-swagger-router-controller: "swagger_server.controllers.metrics_controller"
-  /resources/{infraId}/{nodeId}/:
+  /resources/{infraId}/:
     get:
       tags:
       - "Resources"
@@ -77,9 +77,9 @@ paths:
         required: true
         type: "string"
       - name: "nodeId"
-        in: "path"
+        in: "query"
         description: "The node name based on the blueprint"
-        required: true
+        required: false
         type: "string"
       responses:
         200:
@@ -87,7 +87,7 @@ paths:
           schema:
             $ref: "#/definitions/Resources"
       x-swagger-router-controller: "swagger_server.controllers.resources_controller"
-  /resources/{infraId}/{nodeId}/usage/:
+  /resources/{infraId}/usage/:
     get:
       tags:
       - "Resources"
@@ -104,9 +104,9 @@ paths:
         required: true
         type: "string"
       - name: "nodeId"
-        in: "path"
+        in: "query"
         description: "The node name based on the blueprint"
-        required: true
+        required: false
         type: "string"
       responses:
         200:
