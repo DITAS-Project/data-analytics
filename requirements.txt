@@ -2,3 +2,5 @@ connexion == 1.1.15
 python_dateutil == 2.6.0
 setuptools >= 21.0.0
 elasticsearch == 7.0.1
+kubernetes == 8.0.1
+requests==2.21.0
