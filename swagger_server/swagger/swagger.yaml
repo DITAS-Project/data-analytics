@@ -2,7 +2,7 @@
 swagger: "2.0"
 info:
   description: "Beta version of the DITAS Data Analytics REST API"
-  version: "0.1.2"
+  version: "0.1.3"
   title: "DITAS Data analytics"
   contact:
     email: "bogdan.despotov@cloudsigma.com"
@@ -15,7 +15,7 @@ tags:
 schemes:
 - "https"
 paths:
-  /meter/{infraId}/:
+  /meter/{vdcId}/:
     get:
       tags:
       - "Metrics"
@@ -25,10 +25,15 @@ paths:
       - "application/json"
       - "application/xml"
       parameters:
-      - name: "infraId"
+      - name: "vdcId"
         in: "path"
-        description: "The infrastructure name based on the blueprint"
+        description: "The VDC id"
         required: true
+        type: "string"
+      - name: "blueprintId"
+        in: "query"
+        description: "Blueprint id"
+        required: false
         type: "string"
       - name: "operationID"
         in: "query"
@@ -133,13 +138,14 @@ definitions:
     items:
       $ref: "#/definitions/metricRes_inner"
   metricRes_inner:
+    type: "object"
     properties:
       operationID:
         type: "string"
       name:
         type: "string"
       value:
-        type: "integer"
+        type: "number"
       unit:
         type: "string"
       timestamp:

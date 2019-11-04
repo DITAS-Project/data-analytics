@@ -15,7 +15,7 @@ class MetricResInner(Model):
     Do not edit the class manually.
     """
 
-    def __init__(self, operation_id: str=None, name: str=None, value: int=None, unit: str=None, timestamp: datetime=None, appendix: str=None):  # noqa: E501
+    def __init__(self, operation_id: str=None, name: str=None, value: float=None, unit: str=None, timestamp: datetime=None, appendix: str=None):  # noqa: E501
         """MetricResInner - a model defined in Swagger
 
         :param operation_id: The operation_id of this MetricResInner.  # noqa: E501
@@ -23,7 +23,7 @@ class MetricResInner(Model):
         :param name: The name of this MetricResInner.  # noqa: E501
         :type name: str
         :param value: The value of this MetricResInner.  # noqa: E501
-        :type value: int
+        :type value: float
         :param unit: The unit of this MetricResInner.  # noqa: E501
         :type unit: str
         :param timestamp: The timestamp of this MetricResInner.  # noqa: E501
@@ -34,7 +34,7 @@ class MetricResInner(Model):
         self.swagger_types = {
             'operation_id': str,
             'name': str,
-            'value': int,
+            'value': float,
             'unit': str,
             'timestamp': datetime,
             'appendix': str
@@ -110,22 +110,22 @@ class MetricResInner(Model):
         self._name = name
 
     @property
-    def value(self) -> int:
+    def value(self) -> float:
         """Gets the value of this MetricResInner.
 
 
         :return: The value of this MetricResInner.
-        :rtype: int
+        :rtype: float
         """
         return self._value
 
     @value.setter
-    def value(self, value: int):
+    def value(self, value: float):
         """Sets the value of this MetricResInner.
 
 
         :param value: The value of this MetricResInner.
-        :type value: int
+        :type value: float
         """
 
         self._value = value

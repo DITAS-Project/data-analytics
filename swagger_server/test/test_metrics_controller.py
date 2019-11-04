@@ -17,12 +17,13 @@ class TestMetricsController(BaseTestCase):
 
         
         """
-        query_string = [('operationID', 'operationID_example'),
+        query_string = [('blueprintId', 'blueprintId_example'),
+                        ('operationID', 'operationID_example'),
                         ('name', 'name_example'),
                         ('startTime', '2013-10-20T19:20:30+01:00'),
                         ('endTime', '2013-10-20T19:20:30+01:00')]
         response = self.client.open(
-            '/data-analytics/meter/{infraId}/'.format(infraId='infraId_example'),
+            '/data-analytics/meter/{vdcId}/'.format(vdcId='vdcId_example'),
             method='GET',
             query_string=query_string)
         self.assert200(response,

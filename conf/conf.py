@@ -2,7 +2,7 @@ import os
 import json
 
 
-if os.path.isfile('/opt/blueprint/blueprint.json') and os.path.isfile('/etc/ditas/vdc/data-analytics.json'):
+if os.path.isfile('/opt/blueprint/blueprint.json') and os.path.isfile('/etc/ditas/vdm/data-analytics.json'):
     with open('/opt/blueprint/blueprint.json', 'r') as blueprint_cont:
         try:
             blueprint = json.load(blueprint_cont)
@@ -26,7 +26,8 @@ if os.path.isfile('/opt/blueprint/blueprint.json') and os.path.isfile('/etc/dita
 
     config['es_api'] = da_conf['ElasticSearchURL']
     config['port'] = da_conf['Port']
-    config['k8s_metrics'] = da_conf['K8s_metrics']
+    config['k8s_metrics'] = da_conf['K8sMetrics']
+    config['rook_endpoint'] = da_conf['RookEndpoint']
 else:
     CONFIG_LOCATION = os.getenv('DA_CONFIG',
                                 os.path.join(os.path.expanduser('~'), '.data-analytics.conf')
