@@ -3,7 +3,7 @@ import json
 import requests
 
 from kubernetes import client
-from .conf import config
+from conf.conf import config
 
 
 class GenericK8Client:

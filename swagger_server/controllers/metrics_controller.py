@@ -1,11 +1,8 @@
-import connexion
-import six
-
 from swagger_server.models.metric_res import MetricRes  # noqa: E501
 from swagger_server import util
 
-from .conf import config
-from .elastic_client import ElasticClient
+from conf.conf import config
+from clients.elastic_client import ElasticClient
 
 
 BASE_QUERY = {

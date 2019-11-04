@@ -3,7 +3,7 @@
 import connexion
 
 from swagger_server import encoder
-from swagger_server.controllers.conf import config
+from conf.conf import config
 
 
 def main():

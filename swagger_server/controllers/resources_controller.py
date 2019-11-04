@@ -1,12 +1,8 @@
-import connexion
-import six
-from kubernetes.client.rest import ApiException
-
 from swagger_server.models.resources import Resources  # noqa: E501
 from swagger_server import util
 
-from .kubernetes_client import GenericK8Client, HeketiClient
-from .conf import config
+from clients.kubernetes_client import GenericK8Client, HeketiClient
+from conf.conf import config
 
 
 def current_usage(infraId, nodeId=None):  # noqa: E501

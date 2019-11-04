@@ -1,5 +1,5 @@
 from elasticsearch import Elasticsearch, ElasticsearchException
-from .conf import config
+from conf.conf import config
 
 
 class ElasticClient:
