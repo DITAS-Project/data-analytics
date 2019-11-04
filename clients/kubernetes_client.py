@@ -9,7 +9,7 @@ from conf.conf import config
 class GenericK8Client:
 
     def __init__(self, infra_name=None, host=None, api_key=None, verify_ssl=False, **kwargs):
-        self.host = host if host is not None else config['infra'][infra_name]['host']
+        self.host = host if host is not None else config['k8s_metrics']
         if 'api_key' in config:
             self.api_key = config['api_key']
         else:
@@ -81,7 +81,26 @@ class HeketiClient:
                 'storage_nodes_count': storage_nodes_count}
 
 
+class RookClient:
 
+    def __init__(self, endpoint=None, verify=False):
+        self.endpoint = endpoint if endpoint is not None else config['rook_endpoint']
+        self.verify = verify
 
+    def client(self, path, method, data={}, headers={}):
+        r = requests.request(method, self.endpoint, headers=headers, data=json.dumps(data), verify=self.verify)
+        r.raise_for_status()
+        return r
 
+    def get_storage_metrics(self, free=False):
+        r = requests.request('GET', self.endpoint, verify=self.verify)
+        r.raise_for_status()
+        matched_total_bytes = re.search(r'ceph_cluster_total_bytes (\d+)', r.content.decode('utf-8'))
+        if free:
+            return {'ceph_cluster_total_bytes': int(matched_total_bytes.group(1))}
+        matched_used_bytes = re.search(r'ceph_cluster_total_used_bytes (\d+)', r.content.decode('utf-8'))
+
+        total_free_bytes = int(matched_total_bytes.group(1)) - int(matched_used_bytes.group(1))
+
+        return {'ceph_cluster_total_free_bytes': total_free_bytes}
 

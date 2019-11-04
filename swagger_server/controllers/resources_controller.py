@@ -1,7 +1,7 @@
 from swagger_server.models.resources import Resources  # noqa: E501
 from swagger_server import util
 
-from clients.kubernetes_client import GenericK8Client, HeketiClient
+from clients.kubernetes_client import GenericK8Client, RookClient
 from conf.conf import config
 
 
@@ -16,7 +16,7 @@ def current_usage(infraId, nodeId=None):  # noqa: E501
     if infraId not in config['infra_names']:
         return 'Infrastructure Id not found in Blueprint', 404
     k8client = GenericK8Client(infra_name=infraId)
-    heketi_client = HeketiClient(infra_name=infraId)
+    rook_client = RookClient()
     v1 = k8client.v1client()
     try:
         if nodeId:
@@ -53,8 +53,8 @@ def current_usage(infraId, nodeId=None):  # noqa: E501
 
     if nodeId:
         mem = util.normalize_metrics(mem=result['usage']['memory'])['mem']
-    stor = heketi_client.get_storage_metrics()
-    storage = util.normalize_metrics(storage=stor['total_bytes_free'])['storage']
+    stor = rook_client.get_storage_metrics()
+    storage = util.normalize_metrics(storage=stor['ceph_cluster_total_free_bytes'])['storage']
     if nodeId:
         return {'cpu': cpu, 'mem': mem, 'storage': storage}
     else:
@@ -72,7 +72,7 @@ def resources(infraId, nodeId=None):  # noqa: E501
     if infraId not in config['infra_names']:
         return 'Infrastructure Id not found in Blueprint', 404
     k8client = GenericK8Client(infra_name=infraId)
-    heketi_client = HeketiClient(infra_name=infraId)
+    rook_client = RookClient
     v1 = k8client.v1client()
     try:
         result = v1.list_node()
@@ -80,8 +80,8 @@ def resources(infraId, nodeId=None):  # noqa: E501
         return 'Cannot connect to Kubernetes API: {}'.format(e), 500
     cpu = 0
     mem = 0
-    stor = heketi_client.get_storage_metrics(substring='size')
-    storage = util.normalize_metrics(storage=stor['total_bytes_size'])['storage']
+    stor = rook_client.get_storage_metrics(free=True)
+    storage = util.normalize_metrics(storage=stor['ceph_cluster_total_bytes'])['storage']
     for node in result.items:
         if nodeId:
             if node.metadata.name == nodeId:

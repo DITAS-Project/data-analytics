@@ -1,7 +1,6 @@
 import os
 import json
 
-from swagger_server.util import nodename_sanitizer
 
 if os.path.isfile('/opt/blueprint/blueprint.json') and os.path.isfile('/etc/ditas/vdc/data-analytics.json'):
     with open('/opt/blueprint/blueprint.json', 'r') as blueprint_cont:
@@ -14,7 +13,8 @@ if os.path.isfile('/opt/blueprint/blueprint.json') and os.path.isfile('/etc/dita
             da_conf = json.load(da_conf_file)
         except Exception as e:
             print('Could not load JSON content from config file: {}'.format(e))
-    config = {}
+
+    config = dict()
     config['infra_names'] = []
     config['infra'] = {}
     for infra in blueprint['COOKBOOK_APPENDIX']['infrastructure']:
@@ -23,15 +23,10 @@ if os.path.isfile('/opt/blueprint/blueprint.json') and os.path.isfile('/etc/dita
         for res in infra['resources']:
             config['infra'][infra['name']][res['name']] = {}
             config['infra'][infra['name']][res['name']]['cpu'] = res['cpu']
-            if res['role'] == 'master':
-                if 'ip' in res:
-                    config['infra'][infra['name']]['host'] = 'http://{}:9999'.format(res['ip'])
-                else:
-                    config['infra'][infra['name']]['host'] = 'http://{}:9999'.format(
-                        nodename_sanitizer(infra['name'], res['name']))
 
     config['es_api'] = da_conf['ElasticSearchURL']
     config['port'] = da_conf['Port']
+    config['k8s_metrics'] = da_conf['K8s_metrics']
 else:
     CONFIG_LOCATION = os.getenv('DA_CONFIG',
                                 os.path.join(os.path.expanduser('~'), '.data-analytics.conf')
