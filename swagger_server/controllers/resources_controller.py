@@ -16,7 +16,7 @@ def current_usage(infraId, nodeId=None):  # noqa: E501
     if infraId not in config['infra_names']:
         return 'Infrastructure Id not found in Blueprint', 404
     k8client = GenericK8Client(infra_name=infraId)
-    rook_client = RookClient()
+    rook_client = RookClient(infra_name=infraId)
     v1 = k8client.v1client()
     try:
         if nodeId:
@@ -72,7 +72,7 @@ def resources(infraId, nodeId=None):  # noqa: E501
     if infraId not in config['infra_names']:
         return 'Infrastructure Id not found in Blueprint', 404
     k8client = GenericK8Client(infra_name=infraId)
-    rook_client = RookClient()
+    rook_client = RookClient(infra_name=infraId)
     v1 = k8client.v1client()
     try:
         result = v1.list_node()
@@ -80,7 +80,7 @@ def resources(infraId, nodeId=None):  # noqa: E501
         return 'Cannot connect to Kubernetes API: {}'.format(e), 500
     cpu = 0
     mem = 0
-    stor = rook_client.get_storage_metrics(free=True)
+    stor = rook_client.get_storage_metrics(total=True)
     storage = util.normalize_metrics(storage=stor['ceph_cluster_total_bytes'])['storage']
     for node in result.items:
         if nodeId:

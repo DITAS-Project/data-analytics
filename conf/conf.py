@@ -9,7 +9,7 @@ if os.path.isfile('/opt/blueprint/blueprint.json') and os.path.isfile('/etc/dita
             blueprint = json.load(blueprint_cont)
         except Exception as e:
             print('Could not load JSON content from blueprint file: {}'.format(e))
-    with open('/etc/ditas/vdc/data-analytics.json') as da_conf_file:
+    with open('/etc/ditas/vdm/data-analytics.json') as da_conf_file:
         try:
             da_conf = json.load(da_conf_file)
         except Exception as e:

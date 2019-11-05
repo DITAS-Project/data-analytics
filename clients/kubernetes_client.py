@@ -83,20 +83,20 @@ class HeketiClient:
 
 class RookClient:
 
-    def __init__(self, endpoint=None, verify=False):
-        self.endpoint = endpoint if endpoint is not None else config['rook_endpoint']
+    def __init__(self, infra_name=None, host=None, verify=False):
+        self.host = host if host is not None else config['infra'][infra_name]['host']
         self.verify = verify
 
     def client(self, path, method, data={}, headers={}):
-        r = requests.request(method, self.endpoint, headers=headers, data=json.dumps(data), verify=self.verify)
+        r = requests.request(method, self.host, headers=headers, data=json.dumps(data), verify=self.verify)
         r.raise_for_status()
         return r
 
-    def get_storage_metrics(self, free=False):
-        r = requests.request('GET', self.endpoint + '/rook/metrics', verify=self.verify)
+    def get_storage_metrics(self, total=False):
+        r = requests.request('GET', self.host + '/rook/metrics', verify=self.verify)
         r.raise_for_status()
         matched_total_bytes = re.search(r'ceph_cluster_total_bytes (\d+)', r.content.decode('utf-8'))
-        if free:
+        if total:
             return {'ceph_cluster_total_bytes': int(matched_total_bytes.group(1))}
         matched_used_bytes = re.search(r'ceph_cluster_total_used_bytes (\d+)', r.content.decode('utf-8'))
 
