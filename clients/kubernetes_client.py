@@ -9,7 +9,7 @@ from conf.conf import config
 class GenericK8Client:
 
     def __init__(self, infra_name=None, host=None, api_key=None, verify_ssl=False, **kwargs):
-        self.host = host if host is not None else config['k8s_metrics']
+        self.host = host if host is not None else config['infra'][infra_name]['host']
         if 'api_key' in config:
             self.api_key = config['api_key']
         else:
@@ -93,7 +93,7 @@ class RookClient:
         return r
 
     def get_storage_metrics(self, free=False):
-        r = requests.request('GET', self.endpoint, verify=self.verify)
+        r = requests.request('GET', self.endpoint + '/rook/metrics', verify=self.verify)
         r.raise_for_status()
         matched_total_bytes = re.search(r'ceph_cluster_total_bytes (\d+)', r.content.decode('utf-8'))
         if free:

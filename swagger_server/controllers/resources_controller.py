@@ -72,7 +72,7 @@ def resources(infraId, nodeId=None):  # noqa: E501
     if infraId not in config['infra_names']:
         return 'Infrastructure Id not found in Blueprint', 404
     k8client = GenericK8Client(infra_name=infraId)
-    rook_client = RookClient
+    rook_client = RookClient()
     v1 = k8client.v1client()
     try:
         result = v1.list_node()

@@ -1,6 +1,7 @@
 import os
 import json
 
+from swagger_server.util import nodename_sanitizer
 
 if os.path.isfile('/opt/blueprint/blueprint.json') and os.path.isfile('/etc/ditas/vdm/data-analytics.json'):
     with open('/opt/blueprint/blueprint.json', 'r') as blueprint_cont:
@@ -17,17 +18,22 @@ if os.path.isfile('/opt/blueprint/blueprint.json') and os.path.isfile('/etc/dita
     config = dict()
     config['infra_names'] = []
     config['infra'] = {}
+    config['TraefikPort'] = da_conf['TraefikPort']
     for infra in blueprint['COOKBOOK_APPENDIX']['infrastructure']:
         config['infra_names'].append(infra['name'])
         config['infra'][infra['name']] = {}
         for res in infra['resources']:
             config['infra'][infra['name']][res['name']] = {}
             config['infra'][infra['name']][res['name']]['cpu'] = res['cpu']
+            if res['role'] == 'master':
+                if 'ip' in res:
+                    config['infra'][infra['name']]['host'] = 'http://{}:{}'.format(res['ip'], config['TraefikPort'])
+                else:
+                    config['infra'][infra['name']]['host'] = 'http://{}:{}'.format(
+                        nodename_sanitizer(infra['name'], res['name']), config['TraefikPort'])
 
     config['es_api'] = da_conf['ElasticSearchURL']
     config['port'] = da_conf['Port']
-    config['k8s_metrics'] = da_conf['K8sMetrics']
-    config['rook_endpoint'] = da_conf['RookEndpoint']
 else:
     CONFIG_LOCATION = os.getenv('DA_CONFIG',
                                 os.path.join(os.path.expanduser('~'), '.data-analytics.conf')
