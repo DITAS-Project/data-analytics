@@ -35,10 +35,4 @@ if os.path.isfile('/opt/blueprint/blueprint.json') and os.path.isfile('/etc/dita
     config['es_api'] = da_conf['ElasticSearchURL']
     config['port'] = da_conf['Port']
 else:
-    CONFIG_LOCATION = os.getenv('DA_CONFIG',
-                                os.path.join(os.path.expanduser('~'), '.data-analytics.conf')
-                                )
-
-    from configobj import ConfigObj
-
-    config = ConfigObj(CONFIG_LOCATION)
+    raise Exception('Blueprint and VDM config not found')
