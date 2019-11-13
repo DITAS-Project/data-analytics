@@ -19,7 +19,7 @@ class TestResourcesController(BaseTestCase):
         """
         query_string = [('nodeId', 'nodeId_example')]
         response = self.client.open(
-            '/data-analytics/resources/{infraId}/usage/'.format(infraId='infraId_example'),
+            '/data-analytics/resources/{vdcId}/{infraId}/usage/'.format(vdcId='vdcId_example', infraId='infraId_example'),
             method='GET',
             query_string=query_string)
         self.assert200(response,
@@ -32,7 +32,7 @@ class TestResourcesController(BaseTestCase):
         """
         query_string = [('nodeId', 'nodeId_example')]
         response = self.client.open(
-            '/data-analytics/resources/{infraId}/'.format(infraId='infraId_example'),
+            '/data-analytics/resources/{vdcId}/{infraId}/'.format(vdcId='vdcId_example', infraId='infraId_example'),
             method='GET',
             query_string=query_string)
         self.assert200(response,

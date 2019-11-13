@@ -1,25 +1,32 @@
-import os
 import json
 
 from swagger_server.util import nodename_sanitizer
 
-if os.path.isfile('/opt/blueprint/blueprint.json') and os.path.isfile('/etc/ditas/vdm/data-analytics.json'):
-    with open('/opt/blueprint/blueprint.json', 'r') as blueprint_cont:
+
+with open('/etc/ditas/vdm/data-analytics.json') as da_conf_file:
+    try:
+        da_conf = json.load(da_conf_file)
+    except Exception as e:
+        print('Could not load JSON content from config file: {}'.format(e))
+
+config = dict()
+config['infra_names'] = []
+config['infra'] = {}
+config['TraefikPort'] = da_conf['TraefikPort']
+
+config['es_api'] = da_conf['ElasticSearchURL']
+config['port'] = da_conf['Port']
+
+
+def get_vdc_config(vdc_id, infra_id=None):
+    file_path = '/var/ditas/vdm/DS4M/blueprints/vdc-{}.json'.format(vdc_id)
+    with open(file_path, 'r') as blueprint_cont:
         try:
             blueprint = json.load(blueprint_cont)
         except Exception as e:
             print('Could not load JSON content from blueprint file: {}'.format(e))
-    with open('/etc/ditas/vdm/data-analytics.json') as da_conf_file:
-        try:
-            da_conf = json.load(da_conf_file)
-        except Exception as e:
-            print('Could not load JSON content from config file: {}'.format(e))
 
-    config = dict()
-    config['infra_names'] = []
-    config['infra'] = {}
-    config['TraefikPort'] = da_conf['TraefikPort']
-    for infra in blueprint['COOKBOOK_APPENDIX']['infrastructure']:
+    for infra in blueprint['COOKBOOK_APPENDIX']['Resources']['infrastructures']:
         config['infra_names'].append(infra['name'])
         config['infra'][infra['name']] = {}
         for res in infra['resources']:
@@ -32,7 +39,5 @@ if os.path.isfile('/opt/blueprint/blueprint.json') and os.path.isfile('/etc/dita
                     config['infra'][infra['name']]['host'] = 'http://{}:{}'.format(
                         nodename_sanitizer(infra['name'], res['name']), config['TraefikPort'])
 
-    config['es_api'] = da_conf['ElasticSearchURL']
-    config['port'] = da_conf['Port']
-else:
-    raise Exception('Blueprint and VDM config not found')
+    return config
+

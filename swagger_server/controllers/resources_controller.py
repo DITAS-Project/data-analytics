@@ -2,17 +2,24 @@ from swagger_server.models.resources import Resources  # noqa: E501
 from swagger_server import util
 
 from clients.kubernetes_client import GenericK8Client, RookClient
-from conf.conf import config
+from conf.conf import get_vdc_config
 
 
-def current_usage(infraId, nodeId=None):  # noqa: E501
-    """Outputs the current resource usage for the whole cluster
+def current_usage(vdcId, infraId, nodeId=None):  # noqa: E501
+    """Outputs the CPU percentage used by nodeId, the remaining free memory (MB) and the free space (GB) remaining on the storage cluster
 
      # noqa: E501
 
+    :param vdcId: The blueprint id
+    :type vdcId: str
+    :param infraId: The infrastructure name based on the blueprint
+    :type infraId: str
+    :param nodeId: The node name based on the blueprint
+    :type nodeId: str
 
     :rtype: Resources
     """
+    config = get_vdc_config(vdcId, infraId)
     if infraId not in config['infra_names']:
         return 'Infrastructure Id not found in Blueprint', 404
     k8client = GenericK8Client(infra_name=infraId)
@@ -61,14 +68,21 @@ def current_usage(infraId, nodeId=None):  # noqa: E501
         return {'cpu': total_cpu_average, 'mem': total_mem_usage, 'storage': storage}
 
 
-def resources(infraId, nodeId=None):  # noqa: E501
-    """Outputs the resources defined for the whole cluster
+def resources(vdcId, infraId, nodeId=None):  # noqa: E501
+    """Outputs the CPU (cores) and memory (MB) capacity for nodeId and the capacity of the storage cluster (GB)
 
      # noqa: E501
 
+    :param vdcId: The blueprint id
+    :type vdcId: str
+    :param infraId: The infrastructure name based on the blueprint
+    :type infraId: str
+    :param nodeId: The node name based on the blueprint
+    :type nodeId: str
 
     :rtype: Resources
     """
+    config = get_vdc_config(vdcId, infraId)
     if infraId not in config['infra_names']:
         return 'Infrastructure Id not found in Blueprint', 404
     k8client = GenericK8Client(infra_name=infraId)

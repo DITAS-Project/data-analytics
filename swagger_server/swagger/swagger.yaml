@@ -1,8 +1,8 @@
 ---
 swagger: "2.0"
 info:
-  description: "Beta version of the DITAS Data Analytics REST API"
-  version: "0.1.3"
+  description: "DITAS Data Analytics REST API"
+  version: "0.1.5"
   title: "DITAS Data analytics"
   contact:
     email: "bogdan.despotov@cloudsigma.com"
@@ -65,7 +65,7 @@ paths:
         400:
           description: "Invalid data input"
       x-swagger-router-controller: "swagger_server.controllers.metrics_controller"
-  /resources/{infraId}/:
+  /resources/{vdcId}/{infraId}/:
     get:
       tags:
       - "Resources"
@@ -76,6 +76,11 @@ paths:
       - "application/json"
       - "application/xml"
       parameters:
+      - name: "vdcId"
+        in: "path"
+        description: "The VDC id according to the blueprint"
+        required: true
+        type: "string"
       - name: "infraId"
         in: "path"
         description: "The infrastructure name based on the blueprint"
@@ -92,7 +97,7 @@ paths:
           schema:
             $ref: "#/definitions/Resources"
       x-swagger-router-controller: "swagger_server.controllers.resources_controller"
-  /resources/{infraId}/usage/:
+  /resources/{vdcId}/{infraId}/usage/:
     get:
       tags:
       - "Resources"
@@ -103,6 +108,11 @@ paths:
       - "application/json"
       - "application/xml"
       parameters:
+      - name: "vdcId"
+        in: "path"
+        description: "The VDC id according to the blueprint"
+        required: true
+        type: "string"
       - name: "infraId"
         in: "path"
         description: "The infrastructure name based on the blueprint"
