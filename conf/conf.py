@@ -15,6 +15,9 @@ config['infra'] = {}
 config['TraefikPort'] = da_conf['TraefikPort']
 
 config['es_api'] = da_conf['ElasticSearchURL']
+config['elasticsearch_authenticate'] = da_conf['elasticsearch_authenticate']
+config['elasticsearch_user'] = da_conf['elasticsearch_user']
+config['elasticsearch_password'] = da_conf['elasticsearch_password']
 config['port'] = da_conf['Port']
 
 

@@ -22,8 +22,9 @@ def current_usage(vdcId, infraId, nodeId=None):  # noqa: E501
     config = get_vdc_config(vdcId, infraId)
     if infraId not in config['infra_names']:
         return 'Infrastructure Id not found in Blueprint', 404
-    k8client = GenericK8Client(infra_name=infraId)
-    rook_client = RookClient(infra_name=infraId)
+    host = config['infra'][infraId]['host']
+    k8client = GenericK8Client(host=host)
+    rook_client = RookClient(host=host)
     v1 = k8client.v1client()
     try:
         if nodeId:
@@ -85,8 +86,9 @@ def resources(vdcId, infraId, nodeId=None):  # noqa: E501
     config = get_vdc_config(vdcId, infraId)
     if infraId not in config['infra_names']:
         return 'Infrastructure Id not found in Blueprint', 404
-    k8client = GenericK8Client(infra_name=infraId)
-    rook_client = RookClient(infra_name=infraId)
+    host = config['infra'][infraId]['host']
+    k8client = GenericK8Client(host=host)
+    rook_client = RookClient(host=host)
     v1 = k8client.v1client()
     try:
         result = v1.list_node()

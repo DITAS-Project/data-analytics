@@ -6,7 +6,11 @@ class ElasticClient:
 
     def __init__(self, es_api=None, **kwargs):
         self.es_api = es_api if es_api and 'es_api' not in config else config['es_api']
-        self.es = Elasticsearch(self.es_api, **kwargs)
+        if config['elasticsearch_authenticate']:
+            self.es = Elasticsearch(self.es_api, http_auth=(config['elasticsearch_user'],
+                                                            config['elasticsearch_password']), **kwargs)
+        else:
+            self.es = Elasticsearch(self.es_api, **kwargs)
 
     def search(self, index_name, query, **kwargs):
         if not self.es.indices.exists(index_name):
