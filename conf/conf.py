@@ -22,7 +22,7 @@ config['port'] = da_conf['Port']
 
 
 def get_vdc_config(vdc_id, infra_id=None):
-    file_path = '/var/ditas/vdm/DS4M/blueprints/vdc-{}.json'.format(vdc_id)
+    file_path = '/var/ditas/vdm/DS4M/blueprints/{}.json'.format(vdc_id)
     with open(file_path, 'r') as blueprint_cont:
         try:
             blueprint = json.load(blueprint_cont)
