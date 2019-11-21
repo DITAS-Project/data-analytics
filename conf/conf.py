@@ -3,7 +3,7 @@ import json
 from swagger_server.util import nodename_sanitizer
 
 
-with open('/etc/ditas/data-analytics.json') as da_conf_file:
+with open('/etc/ditas/data_analytics.json') as da_conf_file:
     try:
         da_conf = json.load(da_conf_file)
     except Exception as e:
