@@ -5,25 +5,25 @@ from clients.elastic_client import ElasticClient
 
 
 BASE_QUERY = {
-  "_source": ["request.name", "request.operationID", "request.value", "request.unit", "request.timestamp", "request.appendix"],
+  "_source": ["meter.name", "meter.operationID", "meter.value", "meter.unit", "meter.timestamp", "meter.appendix"],
   "query": {
     "bool": {
       "must": [{
-        "exists": {"field": "request"}
+        "exists": {"field": "meter"}
         },
         {
           "match": {
-            "request.name": ""
+            "meter.name": ""
           }
         },
         {
           "match": {
-            "request.operationID": ""
+            "meter.operationID": ""
           }
         },
         {
           "range": {
-            "request.timestamp": {
+            "meter.timestamp": {
               "gte": "",
               "lt": ""
             }
@@ -39,17 +39,17 @@ def getmetrics(vdcId, operationID, name, startTime, endTime, blueprintId=None): 
 
     """getmetrics
 
-    Get metric value based on request operation id, name, timestamp # noqa: E501
+    Get metric value based on meter operation id, name, timestamp # noqa: E501
 
     :param vdcId: The VDC id
     :type vdcId: str
     :param operationID: Operation id based on deployment blueprint
     :type operationID: str
-    :param name: Name of request
+    :param name: Name of meter
     :type name: str
-    :param startTime: Start timestamp of request
+    :param startTime: Start timestamp of meter
     :type startTime: str
-    :param endTime: End timestamp of request
+    :param endTime: End timestamp of meter
     :type endTime: str
     :param blueprintId: Blueprint id
     :type blueprintId: str
@@ -65,10 +65,10 @@ def getmetrics(vdcId, operationID, name, startTime, endTime, blueprintId=None): 
     else:
         index_name = '{}-{}'.format(blueprintId, vdcId)
 
-    BASE_QUERY['query']['bool']['must'][1]['match']['request.name'] = name
-    BASE_QUERY['query']['bool']['must'][2]['match']['request.operationID'] = operationID
-    BASE_QUERY['query']['bool']['must'][3]['range']['request.timestamp']['gte'] = startTime
-    BASE_QUERY['query']['bool']['must'][3]['range']['request.timestamp']['lt'] = endTime
+    BASE_QUERY['query']['bool']['must'][1]['match']['meter.name'] = name
+    BASE_QUERY['query']['bool']['must'][2]['match']['meter.operationID'] = operationID
+    BASE_QUERY['query']['bool']['must'][3]['range']['meter.timestamp']['gte'] = startTime
+    BASE_QUERY['query']['bool']['must'][3]['range']['meter.timestamp']['lt'] = endTime
 
     es = ElasticClient()
     try:
