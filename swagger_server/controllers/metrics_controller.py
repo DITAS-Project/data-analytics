@@ -5,7 +5,7 @@ from clients.elastic_client import ElasticClient
 
 
 BASE_QUERY = {
-  "_source": ["meter.name", "meter.operationID", "meter.value", "meter.unit", "meter.timestamp", "meter.appendix"],
+  "_source": ["meter.name", "meter.operationID", "meter.value", "meter.unit", "meter.timestamp"],
   "query": {
     "bool": {
       "must": [{
@@ -61,7 +61,7 @@ def getmetrics(vdcId, operationID, name, startTime, endTime, blueprintId=None): 
     startTime = util.deserialize_datetime(startTime)
     endTime = util.deserialize_datetime(endTime)
     if not blueprintId:
-        index_name = '{}-*'.format(vdcId)
+        index_name = '{}'.format(vdcId)
     else:
         index_name = '{}-{}'.format(blueprintId, vdcId)
 
