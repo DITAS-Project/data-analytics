@@ -61,7 +61,7 @@ def getmetrics(vdcId, operationID, name, startTime, endTime, blueprintId=None): 
     startTime = util.deserialize_datetime(startTime)
     endTime = util.deserialize_datetime(endTime)
     if not blueprintId:
-        index_name = '{}'.format(vdcId)
+        index_name = '{}-*'.format(vdcId)
     else:
         index_name = '{}-{}'.format(blueprintId, vdcId)
 
