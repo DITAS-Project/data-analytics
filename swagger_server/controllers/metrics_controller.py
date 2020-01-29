@@ -72,7 +72,7 @@ def getmetrics(vdcId, operationID, name, startTime, endTime, blueprintId=None): 
 
     es = ElasticClient()
     try:
-        result = es.search(index_name, query=BASE_QUERY)
+        result = es.search(index_name, query=BASE_QUERY, size=100)
     except Exception as e:
         return 'Exception while querying elasticsearch: {}'.format(e), 500
     output_array = []
